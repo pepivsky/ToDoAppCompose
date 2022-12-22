@@ -2,11 +2,14 @@ package com.pepivsky.todocompose.data.repositories
 
 import com.pepivsky.todocompose.data.ToDoDAO
 import com.pepivsky.todocompose.data.models.ToDoTask
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-// inyectando el dao con hilt, no es necesario proveerlo manualmente
-class ToDoRepository @Inject constructor(private val toDoDAO: ToDoDAO) {
+// anotacion para que la instancia de ToDoRepository viva durante toda el ciclo de vida del viewModel
+@ViewModelScoped
+class ToDoRepository @Inject constructor(private val toDoDAO: ToDoDAO) { // inyectando el dao con hilt, no es necesario proveerlo manualmente
+
 
     val getAllTasks: Flow<List<ToDoTask>> = toDoDAO.getAllTask()
 
