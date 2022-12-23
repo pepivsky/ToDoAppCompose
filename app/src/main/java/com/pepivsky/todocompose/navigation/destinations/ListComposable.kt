@@ -8,7 +8,7 @@ import com.pepivsky.todocompose.ui.screens.list.ListScreen
 import com.pepivsky.todocompose.util.Constants.LIST_ARGUMENT_KEY
 import com.pepivsky.todocompose.util.Constants.LIST_SCREEN
 
-fun NavGraphBuilder.listComposable(navigateToTaskScreen: (Int) -> Unit) {
+fun NavGraphBuilder.listComposable(navigateToTaskScreen: (taskId: Int) -> Unit) {
     composable(
     route = LIST_SCREEN,
     arguments = listOf(navArgument(LIST_ARGUMENT_KEY) {

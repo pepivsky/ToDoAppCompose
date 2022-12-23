@@ -30,3 +30,8 @@ get() = if (isLight) Color.White else LightGray
 val Colors.topAppBarBackgroundColor: Color
     @Composable
     get() = if (isLight) Purple500 else Color.Black
+
+// set color for floating action button
+val Colors.fabBackgroundColor: Color
+@Composable
+get() = if (isLight) Teal200 else Purple700
