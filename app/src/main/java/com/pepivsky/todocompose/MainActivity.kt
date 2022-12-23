@@ -10,16 +10,23 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.pepivsky.todocompose.navigation.SetupNavigation
 import com.pepivsky.todocompose.ui.theme.ToDoComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoComposeTheme {
-
+                navController = rememberNavController()
+                SetupNavigation(navHostController = navController)
             }
         }
     }

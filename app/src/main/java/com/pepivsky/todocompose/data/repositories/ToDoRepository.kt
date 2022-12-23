@@ -17,6 +17,7 @@ class ToDoRepository @Inject constructor(private val toDoDAO: ToDoDAO) { // inye
 
     val sortByHighPriority: Flow<List<ToDoTask>> = toDoDAO.sortByHighPriority()
 
+    // no necesita ser una funcion suspendida ya que devuelve un flow y este objeto es asincrono por defecto
     fun getSelectedTask(taskId: Int): Flow<ToDoTask> {
         return toDoDAO.getSelectedTask(taskId = taskId)
     }
