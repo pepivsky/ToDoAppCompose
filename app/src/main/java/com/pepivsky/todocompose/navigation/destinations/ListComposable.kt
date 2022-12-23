@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.pepivsky.todocompose.ui.screens.list.ListScreen
 import com.pepivsky.todocompose.util.Constants.LIST_ARGUMENT_KEY
 import com.pepivsky.todocompose.util.Constants.LIST_SCREEN
 
@@ -14,6 +15,7 @@ fun NavGraphBuilder.listComposable(navigateToTaskScreen: (Int) -> Unit) {
         type = NavType.StringType
     })
     ) {
-
+        // llamando a la funcion que dibuja la pantalla
+            ListScreen(navigateToTaskScreen = navigateToTaskScreen)
     }
 }
