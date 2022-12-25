@@ -7,16 +7,28 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.R
 import com.pepivsky.todocompose.ui.theme.fabBackgroundColor
+import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
+import com.pepivsky.todocompose.util.SearchAppBarState
 
 @Composable
-fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit) {
+fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: SharedViewModel) {
+    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchTextState: String by sharedViewModel.searchTextState
+
     Scaffold(
-        topBar = { ListAppBar() },
+        topBar = {
+            ListAppBar(
+                sharedViewModel = sharedViewModel,
+                searchAppBarState = searchAppBarState,
+                searchTextState = searchTextState
+            )
+        },
         content = { },
         floatingActionButton = {
             ListFAB(onFabClicked = navigateToTaskScreen)
@@ -26,7 +38,10 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit) {
 @Composable
 fun ListFAB(onFabClicked: (taskId: Int) -> Unit) {
     // taskId -1 para probar
-    FloatingActionButton(onClick = { onFabClicked(-1) }, backgroundColor = MaterialTheme.colors.fabBackgroundColor) {
+    FloatingActionButton(
+        onClick = { onFabClicked(-1) },
+        backgroundColor = MaterialTheme.colors.fabBackgroundColor
+    ) {
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(id = R.string.add_button),
@@ -36,8 +51,9 @@ fun ListFAB(onFabClicked: (taskId: Int) -> Unit) {
 }
 
 // funcion que sirve solo para ver el preview
+/*
 @Composable
 @Preview
 private fun ListScreenPreview() {
-    ListScreen(navigateToTaskScreen = {})
-}
+    ListScreen(navigateToTaskScreen = {}, sharedViewModel =)
+}*/

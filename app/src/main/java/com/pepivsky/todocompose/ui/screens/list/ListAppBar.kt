@@ -25,16 +25,42 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.pepivsky.todocompose.components.PriorityItem
 import com.pepivsky.todocompose.ui.theme.*
+import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
+import com.pepivsky.todocompose.util.SearchAppBarState
+import com.pepivsky.todocompose.util.TrailingIconState
 
 @Composable
-fun ListAppBar() {
-    /* DefaultListAppBar(
-         onSearchClicked = { },
-         onSortClicked = { },
-         onDeleteClicked = { }
-     )*/
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
+) {
+    // show by default the AppBar DefaultListAppBar
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = { },
+                onDeleteClicked = { })
+        }
+        // when SearchAppBarState is OPENED then shoe searchAppBar
+        else -> {
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText ->
+                    sharedViewModel.searchTextState.value = newText
+                },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
 
-    SearchAppBar(text = "", onTextChange = {}, onCloseClicked = {}, onSearchClicked = {})
+                },
+                onSearchClicked = {}
+            )
+        }
+    }
 }
 
 // app bar que se muestra por default
@@ -155,6 +181,8 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
+    var trailingIconState by rememberSaveable { mutableStateOf(TrailingIconState.READY_TO_DELETE) }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,7 +218,24 @@ fun SearchAppBar(
                 }
             },
             trailingIcon = {
-                IconButton(onClick = { onCloseClicked() }) {
+                IconButton(onClick = {
+                    when (trailingIconState) {
+                        TrailingIconState.READY_TO_DELETE -> {
+                            onTextChange("")
+                            trailingIconState = TrailingIconState.READY_TO_CLOSE
+                        }
+
+                        TrailingIconState.READY_TO_CLOSE -> {
+                            if (text.isNotEmpty()) { // si contiene texto entonces lo borra
+                                onTextChange("")
+                            } else { // cuando ya no contiene texto entonces cambia la appBar por la defaultListAppBar
+                                onCloseClicked()
+                                trailingIconState = TrailingIconState.READY_TO_DELETE
+                            }
+                        }
+                    }
+                    //onCloseClicked()
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "Close action",
@@ -219,11 +264,13 @@ fun SearchAppBar(
 }
 
 // for preview only
+/*
 @Preview
 @Composable
 private fun DefaultListAppBarPreview() {
     ListAppBar()
 }
+*/
 
 // for preview only
 @Preview
