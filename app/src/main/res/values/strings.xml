@@ -4,5 +4,9 @@
     <string name="search_action">"Search Tasks"</string>
     <string name="sort_action">"Filter action"</string>
     <string name="delete_all_action">Delete all</string>
+    <string name="app_bar_title">Tasks</string>
+    <string name="search_placeholder">Search</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="close_icon">Close action</string>
 
 </resources>
