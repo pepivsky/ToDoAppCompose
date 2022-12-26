@@ -22,6 +22,20 @@ fun ListContent(
     tasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
+    // cuando no hay tareas se muestra la pantalla EmptyContent
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        ShowTasks(tasks = tasks, navigateToTaskScreen = navigateToTaskScreen)
+    }
+}
+
+// muestra la lista de Tasks
+@Composable
+fun ShowTasks(
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
     LazyColumn {
         items(items = tasks, key = {
             it.id

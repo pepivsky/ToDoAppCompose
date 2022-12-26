@@ -8,5 +8,7 @@
     <string name="search_placeholder">Search</string>
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close action</string>
+    <string name="sad_face_icon">Sad face Icon</string>
+    <string name="no_tasks_found">No Tasks found.</string>
 
 </resources>
