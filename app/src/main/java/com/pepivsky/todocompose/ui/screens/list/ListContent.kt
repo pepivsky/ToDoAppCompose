@@ -16,17 +16,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
 import com.pepivsky.todocompose.ui.theme.*
+import com.pepivsky.todocompose.util.RequestState
 
 @Composable
 fun ListContent(
-    tasks: List<ToDoTask>,
+    tasks: RequestState<List<ToDoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    // cuando no hay tareas se muestra la pantalla EmptyContent
-    if (tasks.isEmpty()) {
-        EmptyContent()
-    } else {
-        ShowTasks(tasks = tasks, navigateToTaskScreen = navigateToTaskScreen)
+    if (tasks is RequestState.Success) {
+        // cuando no hay tareas se muestra la pantalla EmptyContent
+        if (tasks.data.isEmpty()) {
+            EmptyContent()
+        } else {
+            ShowTasks(tasks = tasks.data, navigateToTaskScreen = navigateToTaskScreen)
+        }
     }
 }
 
