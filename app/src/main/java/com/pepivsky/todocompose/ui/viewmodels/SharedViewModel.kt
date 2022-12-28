@@ -9,6 +9,7 @@ import com.pepivsky.todocompose.util.RequestState
 import com.pepivsky.todocompose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,6 +40,19 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             }
         } catch (e: Exception) {
             _allToDoTasks.value = RequestState.Error(e)
+        }
+    }
+
+    // selected task
+    private val _selectedTask: MutableStateFlow<ToDoTask?> = MutableStateFlow(null)
+    val selectedTask = _selectedTask
+
+    // fun to get tasks
+    fun getSelectedTask(taskId: Int) {
+        viewModelScope.launch {
+            toDoRepository.getSelectedTask(taskId = taskId). collect() { task ->
+                _selectedTask.value = task
+            }
         }
     }
 }

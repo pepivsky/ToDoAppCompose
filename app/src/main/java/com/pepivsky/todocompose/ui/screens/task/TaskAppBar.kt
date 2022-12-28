@@ -19,9 +19,14 @@ import com.pepivsky.todocompose.data.models.ToDoTask
 
 @Composable
 fun TaskAppBar(
+    selectedTask: ToDoTask?,
     navigateToListScreen: (Action) -> Unit
 ) {
-    NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    if (selectedTask == null) {
+        NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    } else {
+        ExistingTaskAppBar(selectedTask = selectedTask, navigateToListScreen = navigateToListScreen)
+    }
 }
 
 @Composable
@@ -102,6 +107,7 @@ fun ExistingTaskAppBar(
         }
     )
 }
+
 // action for existing task
 @Composable
 fun CloseAction(
@@ -129,6 +135,7 @@ fun DeleteAction(
         )
     }
 }
+
 // action for existing task
 @Composable
 fun UpdateAction(
