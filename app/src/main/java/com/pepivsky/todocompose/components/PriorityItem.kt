@@ -29,6 +29,7 @@ fun PriorityItem(priority: Priority) {
             drawCircle(color = Priority.color)
         }
          */
+        // dibuja un circulo
         Box(modifier = Modifier
             .size(PRIORITY_INDICATOR_SIZE)
             .clip(CircleShape)
