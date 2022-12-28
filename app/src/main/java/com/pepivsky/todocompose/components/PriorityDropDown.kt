@@ -47,7 +47,9 @@ fun PriorityDropDown(
             .height(PRIORITY_DROP_DOWN_HEIGHT)
             .border(
                 width = 1.dp,
+                // copy changes border color
                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+                // add rounded corners to row
                 shape = MaterialTheme.shapes.small
             )
             .clickable {
