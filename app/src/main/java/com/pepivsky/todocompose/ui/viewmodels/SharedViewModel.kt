@@ -87,4 +87,9 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             title.value = newTitle
         }
     }
+
+    // validate that title and description not are empty
+    fun validateFields(): Boolean {
+        return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
 }
