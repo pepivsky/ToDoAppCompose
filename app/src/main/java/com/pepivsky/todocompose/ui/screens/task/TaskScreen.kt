@@ -28,7 +28,8 @@ fun TaskScreen(
             TaskContent(
                 title = title,
                 onTitleChange = {
-                    sharedViewModel.title.value = it
+                    // controla el tamano del string que se escribe en textField del title, solo puede contener menos de 20 caracteres
+                    sharedViewModel.updateTitle(it)
                 },
                 description = description,
                 onDescriptionChange = {
