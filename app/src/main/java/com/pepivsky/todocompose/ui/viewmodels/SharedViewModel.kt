@@ -1,8 +1,10 @@
 package com.pepivsky.todocompose.ui.viewmodels
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
 import com.pepivsky.todocompose.data.repositories.ToDoRepository
 import com.pepivsky.todocompose.util.RequestState
@@ -29,6 +31,16 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     private val _allToDoTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks = _allToDoTasks
 
+    // selected task
+    private val _selectedTask: MutableStateFlow<ToDoTask?> = MutableStateFlow(null)
+    val selectedTask = _selectedTask
+
+    // values of task
+    val id: MutableState<Int> = mutableStateOf(0)
+    val title: MutableState<String> = mutableStateOf("")
+    val description: MutableState<String> = mutableStateOf("")
+    val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
+
     fun getAllTasks() {
         // loading when get tasks
         _allToDoTasks.value = RequestState.Loading
@@ -43,16 +55,29 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
-    // selected task
-    private val _selectedTask: MutableStateFlow<ToDoTask?> = MutableStateFlow(null)
-    val selectedTask = _selectedTask
-
     // fun to get tasks
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
             toDoRepository.getSelectedTask(taskId = taskId). collect() { task ->
                 _selectedTask.value = task
             }
+        }
+    }
+
+    // update Task fields
+    fun updateTaskFields(selectedTask: ToDoTask?) {
+        if (selectedTask != null) {
+            id.value = selectedTask.id
+            title.value = selectedTask.title
+            description.value = selectedTask.description
+            priority.value = selectedTask.priority
+        } else { // se llama cuando se da click en el FAB
+            // setea los valores por defecto
+            id.value = 0
+            title.value = ""
+            description.value = ""
+            priority.value = Priority.LOW
+
         }
     }
 }

@@ -2,26 +2,42 @@ package com.pepivsky.todocompose.ui.screens.task
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
+import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
 import com.pepivsky.todocompose.util.Action
 
 
 @Composable
 fun TaskScreen(
     selectedTask: ToDoTask?,
-    navigateToListScreen: (Action) -> Unit) {
+    navigateToListScreen: (Action) -> Unit,
+    sharedViewModel: SharedViewModel
+) {
+    // variables que observan el viewModel
+    val title: String by sharedViewModel.title
+    val description by sharedViewModel.description
+    val priority by sharedViewModel.priority
+
     Scaffold(
         topBar = {
             TaskAppBar(navigateToListScreen = navigateToListScreen, selectedTask = selectedTask)
         }, content = {
             TaskContent(
-                title = "",
-                onTitleChange = {},
-                description = "",
-                onDescriptionChange = {},
-                priority = Priority.HIGH,
-                onPrioritySelected = {}
+                title = title,
+                onTitleChange = {
+                    sharedViewModel.title.value = it
+                },
+                description = description,
+                onDescriptionChange = {
+                    sharedViewModel.description.value = it
+                },
+                priority = priority,
+                onPrioritySelected = {
+                    sharedViewModel.priority.value = it
+                }
             )
         }
     )
