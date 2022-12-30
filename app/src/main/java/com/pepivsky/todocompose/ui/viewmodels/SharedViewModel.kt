@@ -70,7 +70,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
-    // update Task fields
+    // update fields of this class
     fun updateTaskFields(selectedTask: ToDoTask?) {
         if (selectedTask != null) {
             id.value = selectedTask.id
@@ -124,11 +124,23 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
+    private fun deleteTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val toDoTask = ToDoTask(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            toDoRepository.deleteTask(toDoTask = toDoTask)
+        }
+    }
+
     fun handleDatabaseActions(action: Action) {
         when(action) {
             Action.ADD -> addTask()
             Action.UPDATE ->  updateTask()
-            Action.DELETE -> { }
+            Action.DELETE -> deleteTask()
             Action.DELETE_ALL -> { }
             Action.UNDO -> { }
             // else se llama cuando es NO_ACTION
