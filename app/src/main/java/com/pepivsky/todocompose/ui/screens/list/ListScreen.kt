@@ -1,22 +1,18 @@
 package com.pepivsky.todocompose.ui.screens.list
 
 import android.util.Log
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.pepivsky.todocompose.R
 import com.pepivsky.todocompose.ui.theme.fabBackgroundColor
 import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
 import com.pepivsky.todocompose.util.SearchAppBarState
+import androidx.compose.runtime.*
+import com.pepivsky.todocompose.util.Action
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: SharedViewModel) {
@@ -42,7 +38,19 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
     // pass action to viewModel function
     sharedViewModel.handleDatabaseActions(action = action)
 
+    // estado del scaffold
+    val scaffoldState = rememberScaffoldState()
+
+    // muestra el snackBar
+    DisplaySnackBar(
+        scaffoldState = scaffoldState,
+        handleDatabaseActions = { sharedViewModel.handleDatabaseActions(action = action) },
+        taskTitle = sharedViewModel.title.value,
+        action = action
+    )
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             ListAppBar(
                 sharedViewModel = sharedViewModel,
@@ -74,6 +82,29 @@ fun ListFAB(onFabClicked: (taskId: Int) -> Unit) {
             tint = Color.White
         )
     }
+}
+
+@Composable
+fun DisplaySnackBar(
+    scaffoldState: ScaffoldState,
+    handleDatabaseActions: () -> Unit,
+    taskTitle: String,
+    action: Action
+) {
+    handleDatabaseActions()
+
+    val scope = rememberCoroutineScope()
+    // cuando la variable action cambia se dispara el lauch effect
+    LaunchedEffect(key1 = action, block = {
+        if (action != Action.NO_ACTION) {
+            scope.launch {
+                val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                    message = "${action.name}: $taskTitle",
+                    actionLabel = "OK"
+                )
+            }
+        }
+    })
 }
 
 // funcion que sirve solo para ver el preview
