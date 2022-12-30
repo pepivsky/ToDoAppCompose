@@ -36,8 +36,6 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
     val searchTextState: String by sharedViewModel.searchTextState
 
     // pass action to viewModel function
-    sharedViewModel.handleDatabaseActions(action = action)
-
     // estado del scaffold
     val scaffoldState = rememberScaffoldState()
 
@@ -96,6 +94,7 @@ fun DisplaySnackBar(
     val scope = rememberCoroutineScope()
     // cuando la variable action cambia se dispara el lauch effect
     LaunchedEffect(key1 = action, block = {
+        Log.d("DisplaySnackBar", "triggered ${action.name}")
         if (action != Action.NO_ACTION) {
             scope.launch {
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
