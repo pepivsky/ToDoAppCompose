@@ -26,6 +26,8 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
         Log.d("ListScreen", "LaunchEffect triggered!")
         sharedViewModel.getAllTasks()
     })
+    // observe action from here
+    val action by sharedViewModel.action
 
     // lista de objetos todoTask, se transforma a un estado con collectAsState para poder ser obsrvado por la ui
     val allTasks by sharedViewModel.allTasks.collectAsState() // usando el by se puede tratar como una lista normal y no como un estado
@@ -36,6 +38,9 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
 
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
+
+    // pass action to viewModel function
+    sharedViewModel.handleDatabaseActions(action = action)
 
     Scaffold(
         topBar = {

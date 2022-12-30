@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
 import com.pepivsky.todocompose.data.repositories.ToDoRepository
+import com.pepivsky.todocompose.util.Action
 import com.pepivsky.todocompose.util.Constants
 import com.pepivsky.todocompose.util.RequestState
 import com.pepivsky.todocompose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -21,6 +23,9 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el viewModel
     private val toDoRepository: ToDoRepository
 ) : ViewModel() {
+
+    // val to observe that action is sended
+    val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
     // default state is closed, when is open then show searchAppBar
     val searchAppBarState = mutableStateOf(SearchAppBarState.CLOSED)
@@ -59,7 +64,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     // fun to get tasks
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
-            toDoRepository.getSelectedTask(taskId = taskId). collect() { task ->
+            toDoRepository.getSelectedTask(taskId = taskId).collect() { task ->
                 _selectedTask.value = task
             }
         }
@@ -83,7 +88,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     }
 
     fun updateTitle(newTitle: String) {
-        if(newTitle.length < Constants.MAX_TITLE_LENGTH) {
+        if (newTitle.length < Constants.MAX_TITLE_LENGTH) {
             title.value = newTitle
         }
     }
@@ -91,5 +96,34 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     // validate that title and description not are empty
     fun validateFields(): Boolean {
         return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
+
+    // add task to DB
+    private fun addTask() {
+        // codigo que se ejecuta en una corutina
+        viewModelScope.launch(Dispatchers.IO) {
+            // creando el obketo que se va a guardar en la bd
+            val toDoTask = ToDoTask(
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            toDoRepository.addTask(toDoTask)
+        }
+    }
+
+    fun handleDatabaseActions(action: Action) {
+        when(action) {
+            Action.ADD -> addTask()
+            Action.UPDATE -> { }
+            Action.DELETE -> { }
+            Action.DELETE_ALL -> { }
+            Action.UNDO -> { }
+            // else se llama cuando es NO_ACTION
+            else -> { }
+
+        }
+        // finally setting default value to mutable state
+        this.action.value = Action.NO_ACTION
     }
 }
