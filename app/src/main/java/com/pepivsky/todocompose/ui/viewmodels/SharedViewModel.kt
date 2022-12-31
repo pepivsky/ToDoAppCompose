@@ -142,7 +142,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             Action.UPDATE ->  updateTask()
             Action.DELETE -> deleteTask()
             Action.DELETE_ALL -> { }
-            Action.UNDO -> { }
+            Action.UNDO -> addTask()
             // else se llama cuando es NO_ACTION
             else -> { }
 
