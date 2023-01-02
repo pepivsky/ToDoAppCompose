@@ -28,6 +28,9 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
     // lista de objetos todoTask, se transforma a un estado con collectAsState para poder ser obsrvado por la ui
     val allTasks by sharedViewModel.allTasks.collectAsState() // usando el by se puede tratar como una lista normal y no como un estado
 
+    // lista de objetos buscados desde el appBar
+    val searchedTasks by sharedViewModel.searchedTasks.collectAsState() // usando el by se puede tratar como una lista normal y no como un estado
+
     /*for (task in allTasks.value) {
         Log.d("ListScreen", "for loop" + task.title)
     }*/
@@ -61,7 +64,9 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
         },
         content = {
             ListContent(
-                tasks = allTasks,
+                allTasks = allTasks,
+                searchedTasks = searchedTasks,
+                searchAppBarState = searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         },

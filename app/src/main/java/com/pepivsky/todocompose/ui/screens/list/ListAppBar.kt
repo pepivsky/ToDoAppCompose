@@ -57,7 +57,10 @@ fun ListAppBar(
                     sharedViewModel.searchTextState.value = ""
 
                 },
-                onSearchClicked = {}
+                // se dispara cuando el usuario presiona el boton de buscar del teclado
+                onSearchClicked = {
+                    sharedViewModel.searchInDB(searchQuery = it)
+                }
             )
         }
     }

@@ -47,6 +47,11 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
+    // for search a task
+    private val _searchedToDoTasks =
+        MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTasks = _searchedToDoTasks
+
     fun getAllTasks() {
         // loading when get tasks
         _allToDoTasks.value = RequestState.Loading
@@ -110,6 +115,8 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             )
             toDoRepository.addTask(toDoTask)
         }
+        // close appBarSearch when new task is added
+        searchAppBarState.value = SearchAppBarState.CLOSED
     }
 
     private fun updateTask() {
@@ -137,17 +144,33 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     }
 
     fun handleDatabaseActions(action: Action) {
-        when(action) {
+        when (action) {
             Action.ADD -> addTask()
-            Action.UPDATE ->  updateTask()
+            Action.UPDATE -> updateTask()
             Action.DELETE -> deleteTask()
-            Action.DELETE_ALL -> { }
+            Action.DELETE_ALL -> {}
             Action.UNDO -> addTask()
             // else se llama cuando es NO_ACTION
-            else -> { }
+            else -> {}
 
         }
         // finally setting default value to mutable state
         this.action.value = Action.NO_ACTION
+    }
+
+    fun searchInDB(searchQuery: String) {
+        // loading when get tasks
+        _searchedToDoTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                toDoRepository.searchInDatabase(searchQuery = "%$searchQuery%")
+                    .collect { searchedTasks ->
+                        _searchedToDoTasks.value = RequestState.Success(searchedTasks)
+                    }
+            }
+        } catch (e: Exception) {
+            _searchedToDoTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
     }
 }
