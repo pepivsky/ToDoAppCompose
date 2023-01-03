@@ -148,7 +148,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             Action.ADD -> addTask()
             Action.UPDATE -> updateTask()
             Action.DELETE -> deleteTask()
-            Action.DELETE_ALL -> {}
+            Action.DELETE_ALL -> deleteAllTasks()
             Action.UNDO -> addTask()
             // else se llama cuando es NO_ACTION
             else -> {}
@@ -172,5 +172,11 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             _searchedToDoTasks.value = RequestState.Error(e)
         }
         searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
+
+    private fun deleteAllTasks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.deleteAllTask()
+        }
     }
 }
