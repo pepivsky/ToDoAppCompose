@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
+import com.pepivsky.todocompose.data.repositories.DataStoreRepository
 import com.pepivsky.todocompose.data.repositories.ToDoRepository
 import com.pepivsky.todocompose.util.Action
 import com.pepivsky.todocompose.util.Constants
@@ -21,7 +22,8 @@ import javax.inject.Inject
 // anotacion para hacer el viewModel inyectable
 @HiltViewModel
 class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el viewModel
-    private val toDoRepository: ToDoRepository
+    private val toDoRepository: ToDoRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     // val to observe that action is sended
