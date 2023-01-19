@@ -21,6 +21,8 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
     LaunchedEffect(key1 = true, block = {
         Log.d("ListScreen", "LaunchEffect triggered!")
         sharedViewModel.getAllTasks()
+        // get sort state
+        sharedViewModel.readSortState()
     })
     // observe action from here
     val action by sharedViewModel.action
@@ -31,9 +33,14 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
     // lista de objetos buscados desde el appBar
     val searchedTasks by sharedViewModel.searchedTasks.collectAsState() // usando el by se puede tratar como una lista normal y no como un estado
 
-    /*for (task in allTasks.value) {
-        Log.d("ListScreen", "for loop" + task.title)
-    }*/
+    // observar el sort state del viewmodel
+    val sortState by sharedViewModel.sortState.collectAsState()
+
+    // tareas con prioridad baja
+    val lowPriorityTasks by sharedViewModel.lowPriorityTasks.collectAsState()
+
+    // tareas con prioridad alta
+    val highPriorityTasks by sharedViewModel.highPriorityTasks.collectAsState()
 
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
@@ -67,7 +74,10 @@ fun ListScreen(navigateToTaskScreen: (taskId: Int) -> Unit, sharedViewModel: Sha
                 allTasks = allTasks,
                 searchedTasks = searchedTasks,
                 searchAppBarState = searchAppBarState,
-                navigateToTaskScreen = navigateToTaskScreen
+                navigateToTaskScreen = navigateToTaskScreen,
+                lowPriorityTasks = lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState = sortState
             )
         },
         floatingActionButton = {

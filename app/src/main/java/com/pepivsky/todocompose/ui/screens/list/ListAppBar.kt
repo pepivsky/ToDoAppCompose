@@ -42,7 +42,7 @@ fun ListAppBar(
                 onSearchClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
-                onSortClicked = { },
+                onSortClicked = { sharedViewModel.persistSortState(it) },
                 onDeleteAllConfirmed = {
                     sharedViewModel.action.value = Action.DELETE_ALL
                 })
@@ -139,18 +139,21 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
         }) {
             PriorityItem(priority = Priority.LOW)
         }
-        DropdownMenuItem(onClick = {
+
+        /*DropdownMenuItem(onClick = {
             expanded = false
             onSortClicked(Priority.MEDIUM)
         }) {
             PriorityItem(priority = Priority.MEDIUM)
-        }
+        }*/
+
         DropdownMenuItem(onClick = {
             expanded = false
             onSortClicked(Priority.HIGH)
         }) {
             PriorityItem(priority = Priority.HIGH)
         }
+
         DropdownMenuItem(onClick = {
             expanded = false
             onSortClicked(Priority.NONE)

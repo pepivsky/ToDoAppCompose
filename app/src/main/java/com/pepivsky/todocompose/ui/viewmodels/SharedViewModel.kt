@@ -14,8 +14,7 @@ import com.pepivsky.todocompose.util.RequestState
 import com.pepivsky.todocompose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -179,6 +178,48 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     private fun deleteAllTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.deleteAllTask()
+        }
+    }
+
+    private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    val sortState = _sortState
+
+    // get tasks with lowPriority
+    val lowPriorityTasks: StateFlow<List<ToDoTask>> =
+        toDoRepository.sortByLowPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+
+    // get tasks with HighPriority
+    val highPriorityTasks: StateFlow<List<ToDoTask>> =
+        toDoRepository.sortByHighPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+
+
+    fun readSortState() {
+        _sortState.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                dataStoreRepository.readSortState
+                    // transformando el string a un objeto priority
+                    .map { Priority.valueOf(it) }
+                    .collect {
+                        _sortState.value = RequestState.Success(it)
+                    }
+            }
+        } catch (e: Exception) {
+            _sortState.value = RequestState.Error(e)
+        }
+    }
+
+    fun persistSortState(priority: Priority) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.persistSrotState(priority = priority)
         }
     }
 }
