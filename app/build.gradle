@@ -81,4 +81,7 @@ dependencies {
     // icons
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 
+    // splashScreen
+    implementation "androidx.core:core-splashscreen:1.0.0"
+
 }
