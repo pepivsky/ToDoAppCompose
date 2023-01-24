@@ -27,7 +27,6 @@ import com.pepivsky.todocompose.ui.theme.*
 import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
 import com.pepivsky.todocompose.util.Action
 import com.pepivsky.todocompose.util.SearchAppBarState
-import com.pepivsky.todocompose.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -199,7 +198,6 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
-    var trailingIconState by rememberSaveable { mutableStateOf(TrailingIconState.READY_TO_DELETE) }
 
     Surface(
         modifier = Modifier
@@ -237,22 +235,13 @@ fun SearchAppBar(
             },
             trailingIcon = {
                 IconButton(onClick = {
-                    when (trailingIconState) {
-                        TrailingIconState.READY_TO_DELETE -> {
-                            onTextChange("")
-                            trailingIconState = TrailingIconState.READY_TO_CLOSE
-                        }
-
-                        TrailingIconState.READY_TO_CLOSE -> {
-                            if (text.isNotEmpty()) { // si contiene texto entonces lo borra
-                                onTextChange("")
-                            } else { // cuando ya no contiene texto entonces cambia la appBar por la defaultListAppBar
-                                onCloseClicked()
-                                trailingIconState = TrailingIconState.READY_TO_DELETE
-                            }
-                        }
+                    // cuando hay texto y se le da tap a la x entonces lo setea a vacio
+                    if (text.isNotEmpty()) {
+                        onTextChange("")
+                    } else {
+                        // cuando esta vacio se ejecuta el onClose y se cierra el appBar de busqueda
+                        onCloseClicked()
                     }
-                    //onCloseClicked()
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Close,
