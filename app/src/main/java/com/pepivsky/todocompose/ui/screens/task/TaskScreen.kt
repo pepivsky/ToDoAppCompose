@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.addCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
@@ -30,7 +31,10 @@ fun TaskScreen(
     val context = LocalContext.current
 
     // for handle when back button is pressed
-    BackHandler(onBackPressed = { navigateToListScreen(Action.NO_ACTION) })
+    BackHandler {
+        Log.d("BACK", "Triggered")
+        navigateToListScreen(Action.NO_ACTION)
+    }
 
     Scaffold(
         topBar = {
@@ -69,32 +73,3 @@ fun TaskScreen(
 
 fun displayToast(context: Context) =
     Toast.makeText(context, "Fields empty", Toast.LENGTH_SHORT).show()
-
-// intercepta el boton back del sistema, de este modo se evita un bug
-@Composable
-fun BackHandler(
-    backDispatcher: OnBackPressedDispatcher? =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher,
-    onBackPressed: () -> Unit
-) {
-    val currentOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-
-    val backCallBack = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                currentOnBackPressed()
-                Log.d("BACK HANDLER", "Triggered")
-            }
-
-        }
-    }
-
-    DisposableEffect(key1 = backDispatcher) {
-        backDispatcher?.addCallback(backCallBack)
-
-        onDispose {
-            backCallBack.remove()
-        }
-    }
-}
-
