@@ -7,25 +7,25 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.pepivsky.todocompose.data.models.Priority
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.pepivsky.todocompose.R
 
@@ -41,9 +41,17 @@ fun PriorityDropDown(
     // val to animate
     val angle: Float by animateFloatAsState(targetValue = if (expanded) 180F else 0F)
 
+    var parentSize by remember {
+        mutableStateOf(IntSize.Zero)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .onGloballyPositioned {
+                // guardando el tamano del row
+                parentSize = it.size
+            }
             .height(PRIORITY_DROP_DOWN_HEIGHT)
             .border(
                 width = 1.dp,
@@ -85,30 +93,21 @@ fun PriorityDropDown(
             )
         }
         DropdownMenu(
-            modifier = Modifier.fillMaxWidth(fraction = 0.95F),
+            // asignandole el tamano exacto del row que guardamos en parentSize
+            modifier = Modifier.width(with(LocalDensity.current) { parentSize.width.toDp() }),
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
-            // low
-            DropdownMenuItem(onClick = {
-                expanded = false
-                onPrioritySelected(Priority.LOW)
-            }) {
-                PriorityItem(priority = Priority.LOW)
+
+            // creando un item por cada elemento priority excepto para none
+            Priority.values().filter { it != Priority.NONE }.forEach { priority ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    onPrioritySelected(priority)
+                }) {
+                    PriorityItem(priority = priority)
+                }
             }
-            //medium
-            DropdownMenuItem(onClick = {
-                expanded = false
-                onPrioritySelected(Priority.MEDIUM)
-            }) {
-                PriorityItem(priority = Priority.MEDIUM)
-            }
-            //high
-            DropdownMenuItem(onClick = {
-                expanded = false
-                onPrioritySelected(Priority.HIGH)
-            }) {
-                PriorityItem(priority = Priority.HIGH)
-            }
+
         }
     }
 }
