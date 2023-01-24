@@ -11,12 +11,6 @@ enum class Action {
 
 // convert string to Action object
 fun String?.toAction(): Action {
-    return when (this) {
-        "ADD" -> Action.ADD
-        "UPDATE" -> Action.UPDATE
-        "DELETE" -> Action.DELETE
-        "DELETE_ALL" -> Action.DELETE_ALL
-        "UNDO" -> Action.UNDO
-        else -> Action.NO_ACTION
-    }
+    // return an action object
+    return if (this.isNullOrEmpty()) Action.NO_ACTION else Action.valueOf(this)
 }
