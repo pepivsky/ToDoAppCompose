@@ -21,13 +21,6 @@ fun ListScreen(
     sharedViewModel: SharedViewModel
 ) {
 
-    // se dispara solo cuando es la primera vez que se ejecuta esta funcion composable, no se ejecuta durante la recomposition
-    LaunchedEffect(key1 = true, block = {
-        Log.d("ListScreen", "LaunchEffect triggered!")
-        sharedViewModel.getAllTasks()
-        // get sort state
-        sharedViewModel.readSortState()
-    })
 
     // effect que se dispara cuando el valor de action cambia
     LaunchedEffect(key1 = action, block = {

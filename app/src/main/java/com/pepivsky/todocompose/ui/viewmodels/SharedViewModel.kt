@@ -54,7 +54,19 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val searchedTasks = _searchedToDoTasks
 
-    fun getAllTasks() {
+    // for sort
+    private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    val sortState = _sortState
+
+    init {
+        // leer las tareas de la bd
+        getAllTasks()
+        // leer el orden de datastore
+        readSortState()
+    }
+
+    private fun getAllTasks() {
+        Log.d("getAllTasks", "Triggered")
         // loading when get tasks
         _allToDoTasks.value = RequestState.Loading
         try {
@@ -182,8 +194,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
-    private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
-    val sortState = _sortState
+
 
     // get tasks with lowPriority
     val lowPriorityTasks: StateFlow<List<ToDoTask>> =
@@ -202,7 +213,8 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         )
 
 
-    fun readSortState() {
+    private fun readSortState() {
+        Log.d("readSortState", "Triggered ")
         _sortState.value = RequestState.Loading
         try {
             viewModelScope.launch {
