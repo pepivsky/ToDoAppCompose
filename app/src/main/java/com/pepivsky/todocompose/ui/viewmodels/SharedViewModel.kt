@@ -1,5 +1,6 @@
 package com.pepivsky.todocompose.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -145,6 +146,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     }
 
     fun handleDatabaseActions(action: Action) {
+        Log.d("handleDatabaseActions", "Triggered")
         when (action) {
             Action.ADD -> addTask()
             Action.UPDATE -> updateTask()
@@ -155,8 +157,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             else -> {}
 
         }
-        // finally setting default value to mutable state
-        this.action.value = Action.NO_ACTION
+
     }
 
     fun searchInDB(searchQuery: String) {

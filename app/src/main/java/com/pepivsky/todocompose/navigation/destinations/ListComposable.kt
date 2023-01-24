@@ -11,6 +11,9 @@ import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
 import com.pepivsky.todocompose.util.Constants.LIST_ARGUMENT_KEY
 import com.pepivsky.todocompose.util.Constants.LIST_SCREEN
 import com.pepivsky.todocompose.util.toAction
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+
 
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
@@ -31,7 +34,14 @@ fun NavGraphBuilder.listComposable(
             sharedViewModel.action.value = action
         })
 
+        // observando la actiion
+        val databaseAction by sharedViewModel.action
+
         // llamando a la funcion que dibuja la pantalla
-        ListScreen(navigateToTaskScreen = navigateToTaskScreen, sharedViewModel =  sharedViewModel)
+        ListScreen(
+            action = databaseAction,
+            navigateToTaskScreen = navigateToTaskScreen,
+            sharedViewModel =  sharedViewModel
+        )
     }
 }
