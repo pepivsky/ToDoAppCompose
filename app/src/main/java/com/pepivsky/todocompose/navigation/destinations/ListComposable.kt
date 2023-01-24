@@ -12,7 +12,10 @@ import com.pepivsky.todocompose.util.Constants.LIST_ARGUMENT_KEY
 import com.pepivsky.todocompose.util.Constants.LIST_SCREEN
 import com.pepivsky.todocompose.util.toAction
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.pepivsky.todocompose.util.Action
 
 
 fun NavGraphBuilder.listComposable(
@@ -29,9 +32,16 @@ fun NavGraphBuilder.listComposable(
         val action = navBackStackEntry.arguments?.getString(LIST_ARGUMENT_KEY).toAction()
         Log.d("listComposable", action.name)
 
-        // cuando action cambia su valor se actualiza el valor de la variable del viewModel
-        LaunchedEffect(key1 = action, block = {
-            sharedViewModel.action.value = action
+        // poniendolo como estado evitamos el bug que sucede al recrear la activity
+        var myAction by rememberSaveable { mutableStateOf(Action.NO_ACTION) }
+
+        // cuando myAction cambia su valor se actualiza el valor de la variable del viewModel
+        LaunchedEffect(key1 = myAction, block = {
+            if (action != myAction) {
+                myAction = action
+                sharedViewModel.action.value = action
+            }
+
         })
 
         // observando la actiion
