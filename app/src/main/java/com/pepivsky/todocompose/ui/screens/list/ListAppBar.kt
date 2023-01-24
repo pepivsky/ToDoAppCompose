@@ -132,32 +132,14 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
     }
     // dropdown menu with prioritys
     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-        DropdownMenuItem(onClick = {
-            expanded = false
-            onSortClicked(Priority.LOW)
-        }) {
-            PriorityItem(priority = Priority.LOW)
-        }
-
-        /*DropdownMenuItem(onClick = {
-            expanded = false
-            onSortClicked(Priority.MEDIUM)
-        }) {
-            PriorityItem(priority = Priority.MEDIUM)
-        }*/
-
-        DropdownMenuItem(onClick = {
-            expanded = false
-            onSortClicked(Priority.HIGH)
-        }) {
-            PriorityItem(priority = Priority.HIGH)
-        }
-
-        DropdownMenuItem(onClick = {
-            expanded = false
-            onSortClicked(Priority.NONE)
-        }) {
-            PriorityItem(priority = Priority.NONE)
+        // creando un item por cada valor de priority excepto del MEDIUM
+        Priority.values().filter { it != Priority.MEDIUM }.forEach { priority ->
+            DropdownMenuItem(onClick = {
+                expanded = false
+                onSortClicked(priority)
+            }) {
+                PriorityItem(priority = priority)
+            }
         }
     }
 }
@@ -225,7 +207,7 @@ fun SearchAppBar(
             leadingIcon = {
                 IconButton(
                     modifier = Modifier.alpha(ContentAlpha.disabled),
-                    onClick = { /*TODO*/ }) {
+                    onClick = {  }) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = stringResource(id = R.string.search_icon),
