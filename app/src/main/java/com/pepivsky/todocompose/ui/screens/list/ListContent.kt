@@ -11,6 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.R
@@ -38,7 +42,8 @@ fun ListContent(
     highPriorityTasks: List<ToDoTask>,
     sortState: RequestState<Priority>,
     onSwipeToDelete: (Action, ToDoTask) -> Unit,
-    navigateToTaskScreen: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    onCheckBoxPressed: (Action, ToDoTask) -> Unit
 ) {
 
     if (sortState is RequestState.Success) {
@@ -48,7 +53,8 @@ fun ListContent(
                     HandleListContent(
                         tasks = searchedTasks.data,
                         navigateToTaskScreen = navigateToTaskScreen,
-                        onSwipeToDelete = onSwipeToDelete
+                        onSwipeToDelete = onSwipeToDelete,
+                        onCheckBoxPressed = onCheckBoxPressed
                     )
                 }
             }
@@ -56,23 +62,26 @@ fun ListContent(
                 if (allTasks is RequestState.Success) {
                     HandleListContent(
                         tasks = allTasks.data,
+                        onSwipeToDelete = onSwipeToDelete,
                         navigateToTaskScreen = navigateToTaskScreen,
-                        onSwipeToDelete = onSwipeToDelete
+                        onCheckBoxPressed = onCheckBoxPressed
                     )
                 }
             }
             sortState.data == Priority.LOW -> {
                 HandleListContent(
                     tasks = lowPriorityTasks,
+                    onSwipeToDelete = onSwipeToDelete,
                     navigateToTaskScreen = navigateToTaskScreen,
-                    onSwipeToDelete = onSwipeToDelete
+                    onCheckBoxPressed = onCheckBoxPressed
                 )
             }
             sortState.data == Priority.HIGH -> {
                 HandleListContent(
                     tasks = highPriorityTasks,
+                    onSwipeToDelete = onSwipeToDelete,
                     navigateToTaskScreen = navigateToTaskScreen,
-                    onSwipeToDelete = onSwipeToDelete
+                    onCheckBoxPressed = onCheckBoxPressed
                 )
             }
         }
@@ -85,7 +94,8 @@ fun ListContent(
 fun HandleListContent(
     tasks: List<ToDoTask>,
     onSwipeToDelete: (Action, ToDoTask) -> Unit,
-    navigateToTaskScreen: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    onCheckBoxPressed: (Action, ToDoTask) -> Unit
 ) {
     if (tasks.isEmpty()) {
         EmptyContent()
@@ -93,7 +103,9 @@ fun HandleListContent(
         ShowTasks(
             tasks = tasks,
             navigateToTaskScreen = navigateToTaskScreen,
-            onSwipeToDelete = onSwipeToDelete
+            onSwipeToDelete = onSwipeToDelete,
+            onCheckBoxPressed = onCheckBoxPressed
+
         )
     }
 }
@@ -104,7 +116,8 @@ fun HandleListContent(
 fun ShowTasks(
     tasks: List<ToDoTask>,
     onSwipeToDelete: (Action, ToDoTask) -> Unit,
-    navigateToTaskScreen: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    onCheckBoxPressed: (Action, ToDoTask) -> Unit
 ) {
     LazyColumn {
         items(items = tasks, key = {
@@ -138,7 +151,8 @@ fun ShowTasks(
                     // contenido que queremos borrar
                     TaskItem(
                         toDoTask = task,
-                        navigateToTaskScreen = navigateToTaskScreen
+                        navigateToTaskScreen = navigateToTaskScreen,
+                        onCheckBoxPressed = onCheckBoxPressed
                     )
                 }
 
@@ -152,7 +166,8 @@ fun ShowTasks(
 @Composable
 fun TaskItem(
     toDoTask: ToDoTask,
-    navigateToTaskScreen: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    onCheckBoxPressed: (Action, ToDoTask) -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -164,37 +179,49 @@ fun TaskItem(
             navigateToTaskScreen(toDoTask.id)
         }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(all = LARGE_PADDING)
-                .fillMaxWidth()
-        ) {
-            Row {
-                Text(
-                    modifier = Modifier.weight(1F),
-                    text = toDoTask.title,
-                    color = MaterialTheme.colors.taskItemTextColor,
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
+        var state by rememberSaveable { mutableStateOf(toDoTask.isDone) }
 
-                Box(
-                    modifier = Modifier
-                        .size(PRIORITY_INDICATOR_SIZE)
-                        .clip(CircleShape)
-                        .background(toDoTask.priority.color)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(checked = state, onCheckedChange = {
+                state = it
+                val newToDoTask = toDoTask.copy(isDone = state)
+                onCheckBoxPressed(Action.UPDATE, newToDoTask)
+            })
+            Column(
+                modifier = Modifier
+                    .padding(all = LARGE_PADDING)
+                    .fillMaxWidth()
+            ) {
+                Row {
+                    Text(
+                        modifier = Modifier.weight(1F),
+                        text = toDoTask.title,
+                        color = MaterialTheme.colors.taskItemTextColor,
+                        style = MaterialTheme.typography.h5,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        textDecoration = if (state) TextDecoration.LineThrough else TextDecoration.None
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(PRIORITY_INDICATOR_SIZE)
+                            .clip(CircleShape)
+                            .background(toDoTask.priority.color)
+                    )
+                }
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = toDoTask.description,
+                    color = MaterialTheme.colors.taskItemTextColor,
+                    style = MaterialTheme.typography.subtitle1,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = toDoTask.description,
-                color = MaterialTheme.colors.taskItemTextColor,
-                style = MaterialTheme.typography.subtitle1,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
         }
+
+
     }
 }
 
@@ -217,11 +244,22 @@ fun RedBackground(degrees: Float) {
         )
     }
 }
+/*
+@Preview
+@Composable
+fun DoneCheck() {
+    Box {
+        Checkbox(checked = true, onCheckedChange = { })
+    }
+}
+*/
 
 @Preview
 @Composable
 fun TaskItemPreview() {
-    TaskItem(
+    /*TaskItem(
         toDoTask = ToDoTask(0, "Wash car", "Some random text", Priority.HIGH),
-        navigateToTaskScreen = {})
+        navigateToTaskScreen = {},
+        onCheckBoxPressed = {}
+    )*/
 }

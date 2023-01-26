@@ -71,6 +71,7 @@ fun ListScreen(
             )
         },
         content = {
+            // podria llegar hasta aqui el parametro para mantener el click del checkBox
             ListContent(
                 allTasks = allTasks,
                 searchedTasks = searchedTasks,
@@ -83,6 +84,10 @@ fun ListScreen(
                     sharedViewModel.action.value = action
                     sharedViewModel.updateTaskFields(selectedTask = toDoTask)
                     // evita que dos snackbars se llamen secuencialmente, es decir que cuando una se esta mostrando y se lanza una nueva, la primera se quita para mostrar la segunda
+                    scaffoldState.snackbarHostState.currentSnackbarData
+                }, onCheckBoxPressed = {  action, toDoTask ->
+                    sharedViewModel.action.value = action
+                    sharedViewModel.updateTaskFields(selectedTask = toDoTask)
                     scaffoldState.snackbarHostState.currentSnackbarData
                 }
             )
