@@ -84,11 +84,12 @@ fun ListScreen(
                     sharedViewModel.action.value = action
                     sharedViewModel.updateTaskFields(selectedTask = toDoTask)
                     // evita que dos snackbars se llamen secuencialmente, es decir que cuando una se esta mostrando y se lanza una nueva, la primera se quita para mostrar la segunda
-                    scaffoldState.snackbarHostState.currentSnackbarData
+                    // dismiss arregla que se muestren todas las snackbars, la ultima oculta a las demas, es el comportamiento mas deseado
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                 }, onCheckBoxPressed = {  action, toDoTask ->
                     sharedViewModel.action.value = action
                     sharedViewModel.updateTaskFields(selectedTask = toDoTask)
-                    scaffoldState.snackbarHostState.currentSnackbarData
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                 }
             )
         },
