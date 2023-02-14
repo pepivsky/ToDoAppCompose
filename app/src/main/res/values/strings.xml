@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToDo Compose</string>
+    <string name="app_name">ToDo: daily organizer</string>
     <string name="add_button">"Add button"</string>
     <string name="search_action">"Search Tasks"</string>
     <string name="sort_action">"Filter action"</string>
