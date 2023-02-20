@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToDo: organizador diario</string>
+    <string name="add_button">"Botón de añadir"</string>
+    <string name="search_action">"Buscar tareas"</string>
+    <string name="sort_action">"Filtrar acción"</string>
+    <string name="delete_all_action">Eliminar todo</string>
+    <string name="app_bar_title">Tareas</string>
+    <string name="search_placeholder">Buscar</string>
+    <string name="search_icon">Icono de búsqueda</string>
+    <string name="close_icon">Icono de cerrar</string>
+    <string name="sad_face_icon">Icono de cara triste</string>
+    <string name="no_tasks_found">No se encontraron tareas.</string>
+    <string name="add_task">Añadir tarea</string>
+    <string name="back_arrow">Flecha hacia atrás</string>
+    <string name="delete_icon">Icono de eliminar</string>
+    <string name="update_icon">Icono de actualizar</string>
+    <string name="drop_down_arrow">Flecha de despliegue</string>
+    <string name="title">Título</string>
+    <string name="description">Descripción</string>
+    <string name="no">No</string>
+    <string name="yes">Sí</string>
+    <string name="empty_fields">Campos vacíos</string>
+
+
+    <string name="delete_task">¿Eliminar \'%1$s\'?</string>
+    <string name="delete_task_confirmation">¿Estás seguro de que deseas eliminar \'%1$s\'?</string>
+
+    <string name="delete_all_tasks">¿Eliminar todas las tareas?</string>
+    <string name="delete_all_tasks_confirmation">¿Estás seguro de que deseas eliminar todas las tareas? No hay vuelta atrás después de esta acción.</string>
+    <string name="to_do_logo">Logotipo de To-Do</string>
+</resources>
