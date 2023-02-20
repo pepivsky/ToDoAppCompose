@@ -11,6 +11,8 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.pepivsky.todocompose.R
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
 import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
@@ -40,14 +42,10 @@ fun TaskScreen(
         topBar = {
             TaskAppBar(navigateToListScreen = { action ->
                 // validate when is empty, when is true then show a Toast
-                if (action == Action.NO_ACTION) {
+                if (action == Action.NO_ACTION || sharedViewModel.validateFields()) {
                     navigateToListScreen(action)
                 } else {
-                    if (sharedViewModel.validateFields()) {
-                        navigateToListScreen(action)
-                    } else {
-                        displayToast(context = context)
-                    }
+                    displayToast(context = context)
                 }
             }, selectedTask = selectedTask)
         }, content = {
@@ -72,4 +70,4 @@ fun TaskScreen(
 }
 
 fun displayToast(context: Context) =
-    Toast.makeText(context, "Fields empty", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, context.getText(R.string.empty_fields), Toast.LENGTH_SHORT).show()
