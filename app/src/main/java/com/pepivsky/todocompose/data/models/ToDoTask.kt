@@ -1,5 +1,6 @@
 package com.pepivsky.todocompose.data.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pepivsky.todocompose.util.Constants
@@ -11,5 +12,6 @@ data class ToDoTask(
     val title: String,
     val description: String,
     val priority: Priority,
+    @ColumnInfo(defaultValue = "false")
     val isDone: Boolean = false
 )
