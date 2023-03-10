@@ -1,0 +1,21 @@
+defaultConfig {
+        applicationId "com.pepivsky.todocompose"
+        minSdk 24
+        targetSdk 32
+        versionCode 3
+        versionName "1.2"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
+    }
+
+
+git reset --hard 3214cf24d87be21579fd3e8b34c47abd2431a158
