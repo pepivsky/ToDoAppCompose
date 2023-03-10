@@ -48,6 +48,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
+    val isDone: MutableState<Boolean> = mutableStateOf(false)
 
     // for search a task
     private val _searchedToDoTasks =
@@ -96,12 +97,15 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             title.value = selectedTask.title
             description.value = selectedTask.description
             priority.value = selectedTask.priority
+            isDone.value = selectedTask.isDone
+
         } else { // se llama cuando se da click en el FAB
             // setea los valores por defecto
             id.value = 0
             title.value = ""
             description.value = ""
             priority.value = Priority.LOW
+            isDone.value = false
 
         }
     }
@@ -121,11 +125,12 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     private fun addTask() {
         // codigo que se ejecuta en una corutina
         viewModelScope.launch(Dispatchers.IO) {
-            // creando el obketo que se va a guardar en la bd
+            // creando el objeto que se va a guardar en la bd
             val toDoTask = ToDoTask(
                 title = title.value,
                 description = description.value,
-                priority = priority.value
+                priority = priority.value,
+                isDone = isDone.value
             )
             toDoRepository.addTask(toDoTask)
         }
@@ -139,7 +144,8 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
                 id = id.value,
                 title = title.value,
                 description = description.value,
-                priority = priority.value
+                priority = priority.value,
+                isDone = isDone.value
             )
             toDoRepository.updateTask(toDoTask = toDoTask)
         }
@@ -151,7 +157,8 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
                 id = id.value,
                 title = title.value,
                 description = description.value,
-                priority = priority.value
+                priority = priority.value,
+                isDone = isDone.value
             )
             toDoRepository.deleteTask(toDoTask = toDoTask)
         }
