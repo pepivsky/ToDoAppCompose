@@ -2,6 +2,7 @@ package com.pepivsky.todocompose.ui.screens.task
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -9,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.R
 import com.pepivsky.todocompose.components.PriorityDropDown
@@ -41,7 +43,8 @@ fun TaskContent(
                 Text(text = stringResource(id = R.string.title))
             },
             textStyle = MaterialTheme.typography.body1,
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Sentences)
         )
 
         Spacer(modifier = Modifier.size(MEDIUM_PADDING))
@@ -52,7 +55,9 @@ fun TaskContent(
             value = description,
             onValueChange = { onDescriptionChange(it) },
             label = { Text(text = stringResource(id = R.string.description)) },
-            textStyle = MaterialTheme.typography.body1
+            textStyle = MaterialTheme.typography.body1,
+            keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Sentences)
+
         )
     }
 }
