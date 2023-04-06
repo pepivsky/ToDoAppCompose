@@ -126,7 +126,7 @@ fun DisplaySnackBar(
     // cuando la variable action cambia se dispara el lauch effect
     LaunchedEffect(key1 = action, block = {
         Log.d("DisplaySnackBar", "triggered ${action.name}")
-        if (action != Action.NO_ACTION) {
+        if (action == Action.UNDO) {
             scope.launch {
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = setMessage(action, taskTitle),
