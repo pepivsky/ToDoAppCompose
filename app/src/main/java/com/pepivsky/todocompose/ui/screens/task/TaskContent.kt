@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.R
@@ -35,6 +36,7 @@ fun TaskContent(
             .padding(all = LARGE_PADDING)
 
     ) {
+
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = title,
@@ -44,7 +46,10 @@ fun TaskContent(
             },
             textStyle = MaterialTheme.typography.body1,
             singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Sentences)
+            keyboardOptions = KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+            )
         )
 
         Spacer(modifier = Modifier.size(MEDIUM_PADDING))
@@ -56,8 +61,10 @@ fun TaskContent(
             onValueChange = { onDescriptionChange(it) },
             label = { Text(text = stringResource(id = R.string.description)) },
             textStyle = MaterialTheme.typography.body1,
-            keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Sentences)
-
+            keyboardOptions = KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done
+            )
         )
     }
 }
