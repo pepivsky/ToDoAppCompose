@@ -128,16 +128,19 @@ fun DisplaySnackBar(
         Log.d("DisplaySnackBar", "triggered ${action.name}")
         if (action != Action.NO_ACTION) {
             scope.launch {
-                val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
-                    message = setMessage(action, taskTitle),
-                    actionLabel = setActionLabel(action = action)
-                )
-                // undo delete
-                undoDeletedTask(
-                    action = action,
-                    snackbarResult = snackBarResult,
-                    onUndoClicked = onUndoClicked
-                )
+                if (action == Action.DELETE) {
+                    val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                        message = setMessage(action, taskTitle),
+                        actionLabel = setActionLabel(action = action)
+                    )
+                    // undo delete
+                    undoDeletedTask(
+                        action = action,
+                        snackbarResult = snackBarResult,
+                        onUndoClicked = onUndoClicked
+                    )
+                }
+
             }
             // call onComplete
             onComplete(Action.NO_ACTION)
