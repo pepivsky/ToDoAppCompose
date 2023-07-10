@@ -145,7 +145,7 @@ fun ShowTasks(
             SwipeToDismiss(
                 state = dismissState,
                 directions = setOf(DismissDirection.EndToStart),
-                dismissThresholds = { FractionalThreshold(fraction = 0.2F) },
+                dismissThresholds = { FractionalThreshold(fraction = 0.5F) },
                 background = { RedBackground(degrees = degrees) },
                 dismissContent = {
                     // contenido que queremos borrar

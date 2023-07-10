@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pepivsky.todocompose.navigation.SetupNavigation
 import com.pepivsky.todocompose.ui.theme.ToDoComposeTheme
 import com.pepivsky.todocompose.ui.viewmodels.SharedViewModel
+import com.pepivsky.todocompose.util.RequestState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +31,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // for splashScreen
-        installSplashScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                //sharedViewModel.isLoading.value
+                //sharedViewModel.allTasks.value is RequestState.Loading && sharedViewModel.sortState.value is RequestState.Loading
+                sharedViewModel.sortState.value is RequestState.Loading
+            }
+        }
         setContent {
             ToDoComposeTheme {
                 navController = rememberNavController()

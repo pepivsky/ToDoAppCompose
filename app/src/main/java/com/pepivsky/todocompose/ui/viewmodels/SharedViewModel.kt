@@ -15,6 +15,7 @@ import com.pepivsky.todocompose.util.RequestState
 import com.pepivsky.todocompose.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -229,6 +230,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
                     // transformando el string a un objeto priority
                     .map { Priority.valueOf(it) }
                     .collect {
+                        delay(6000)
                         _sortState.value = RequestState.Success(it)
                     }
             }
