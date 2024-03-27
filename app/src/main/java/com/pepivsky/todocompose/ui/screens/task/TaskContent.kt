@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.pepivsky.todocompose.R
 import com.pepivsky.todocompose.components.PriorityDropDown
 import com.pepivsky.todocompose.data.models.Priority
+import com.pepivsky.todocompose.ui.screens.ads.AdvertView
 import com.pepivsky.todocompose.ui.theme.LARGE_PADDING
 import com.pepivsky.todocompose.ui.theme.MEDIUM_PADDING
 
@@ -60,6 +61,8 @@ fun TaskContent(
         Spacer(modifier = Modifier.size(MEDIUM_PADDING))
 
         PriorityDropDown(priority = priority, onPrioritySelected = onPrioritySelected)
+        Spacer(modifier = Modifier.size(MEDIUM_PADDING))
+        AdvertView(modifier = Modifier.fillMaxWidth())
         OutlinedTextField(
             modifier = Modifier.fillMaxSize(),
             value = description,
