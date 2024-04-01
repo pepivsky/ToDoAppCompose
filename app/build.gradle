@@ -13,8 +13,8 @@ android {
         applicationId "com.pepivsky.todocompose"
         minSdk 24
         targetSdk 33
-        versionCode 10
-        versionName "1.9"
+        versionCode 13
+        versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
