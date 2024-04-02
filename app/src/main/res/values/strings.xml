@@ -29,5 +29,7 @@
     <string name="delete_all_tasks_confirmation">Are you sure you want to remove all tasks? There is no going back after this action.</string>
     <string name="to_do_logo">To-Do Logo</string>
 
+    <!--        change with real value-->
+    <string name="ad_id_banner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
 </resources>

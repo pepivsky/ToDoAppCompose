@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace 'com.pepivsky.todocompose'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.pepivsky.todocompose"
         minSdk 24
-        targetSdk 34
-        versionCode 12
-        versionName "2.0.1"
+        targetSdk 33
+        versionCode 13
+        versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -90,5 +90,8 @@ dependencies {
 
     // splashScreen
     implementation "androidx.core:core-splashscreen:1.0.0"
+
+    // ads
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
 
 }
