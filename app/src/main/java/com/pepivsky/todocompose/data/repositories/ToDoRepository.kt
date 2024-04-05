@@ -2,6 +2,7 @@ package com.pepivsky.todocompose.data.repositories
 
 import com.pepivsky.todocompose.data.ToDoDAO
 import com.pepivsky.todocompose.data.models.ToDoTask
+import com.pepivsky.todocompose.data.models.ToDoTaskIsDone
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -28,6 +29,15 @@ class ToDoRepository @Inject constructor(private val toDoDAO: ToDoDAO) { // inye
 
     suspend fun updateTask(toDoTask: ToDoTask) {
         toDoDAO.updateTask(toDoTask = toDoTask)
+    }
+
+
+    suspend fun updateIsDone(toDoTaskIsDone: ToDoTaskIsDone) {
+        toDoDAO.updateIsDone(toDoTaskIsDone)
+    }
+
+    suspend fun updateAllTasksToUndone() {
+        toDoDAO.updateAllTasksToUndone()
     }
 
     suspend fun deleteTask(toDoTask: ToDoTask) {

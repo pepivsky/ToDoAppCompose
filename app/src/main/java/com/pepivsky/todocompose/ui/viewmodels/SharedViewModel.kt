@@ -73,6 +73,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         try {
             viewModelScope.launch {
                 toDoRepository.getAllTasks.collect {
+                    Log.d("getAllTasks", "Triggered $it")
                     _allToDoTasks.value = RequestState.Success(it)
                 }
             }
@@ -151,6 +152,16 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
+    private fun updateAllTasksToDone() {
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.updateAllTasksToUndone()
+        }
+    }
+
+    private fun updateIsDone() {
+
+    }
+
     private fun deleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
@@ -172,6 +183,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             Action.DELETE -> deleteTask()
             Action.DELETE_ALL -> deleteAllTasks()
             Action.UNDO -> addTask()
+            Action.UNCHECK_ALL -> updateAllTasksToDone()
             // else se llama cuando es NO_ACTION
             else -> {}
 

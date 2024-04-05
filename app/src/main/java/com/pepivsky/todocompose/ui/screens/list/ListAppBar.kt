@@ -44,7 +44,11 @@ fun ListAppBar(
                 onSortClicked = { sharedViewModel.persistSortState(it) },
                 onDeleteAllConfirmed = {
                     sharedViewModel.action.value = Action.DELETE_ALL
-                })
+                },
+                onUncheckAllConfirmed = {
+                    sharedViewModel.action.value = Action.UNCHECK_ALL
+                }
+            )
         }
         // when SearchAppBarState is OPENED then shoe searchAppBar
         else -> {
@@ -72,7 +76,8 @@ fun ListAppBar(
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteAllConfirmed: () -> Unit
+    onDeleteAllConfirmed: () -> Unit,
+    onUncheckAllConfirmed: () -> Unit
 ) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.app_bar_title), color = MaterialTheme.colors.topAppBarContentColor) },
@@ -81,7 +86,8 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
                 onSortClicked = onSortClicked,
-                onDeleteAllConfirmed = onDeleteAllConfirmed
+                onDeleteAllConfirmed = onDeleteAllConfirmed,
+                onUncheckAllConfirmed = onUncheckAllConfirmed,
             )
         }
     )
@@ -91,7 +97,9 @@ fun DefaultListAppBar(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteAllConfirmed: () -> Unit
+    onDeleteAllConfirmed: () -> Unit,
+    onUncheckAllConfirmed: () -> Unit,
+
 ) {
 
     // for manage dialog
@@ -105,7 +113,10 @@ fun ListAppBarActions(
 
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteAllConfirmed = { openDialog = true })
+    DropDownMenuActions(
+        onDeleteAllConfirmed = { openDialog = true },
+        onUncheckAllConfirmed = { onUncheckAllConfirmed() }
+    )
 }
 
 @Composable
@@ -146,7 +157,7 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
 
 // delete all action
 @Composable
-fun DeleteAllAction(onDeleteAllConfirmed: () -> Unit) {
+fun DropDownMenuActions(onDeleteAllConfirmed: () -> Unit, onUncheckAllConfirmed: () -> Unit) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     IconButton(onClick = { expanded = true }) {
@@ -165,6 +176,17 @@ fun DeleteAllAction(onDeleteAllConfirmed: () -> Unit) {
             Text(
                 //modifier = Modifier.padding(start = LARGE_PADDING),
                 text = stringResource(id = R.string.delete_all_action),
+                style = Typography.subtitle2
+            )
+        }
+
+        DropdownMenuItem(onClick = {
+            expanded = false
+            onUncheckAllConfirmed()
+        }) {
+            Text(
+                //modifier = Modifier.padding(start = LARGE_PADDING),
+                text = "Uncheck all",
                 style = Typography.subtitle2
             )
         }

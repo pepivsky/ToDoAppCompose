@@ -182,7 +182,7 @@ fun TaskItem(
         var state by rememberSaveable { mutableStateOf(toDoTask.isDone) }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = state, onCheckedChange = {
+            Checkbox(checked = toDoTask.isDone, onCheckedChange = {
                 state = it
                 val newToDoTask = toDoTask.copy(isDone = state)
                 onCheckBoxPressed(Action.UPDATE, newToDoTask)
@@ -200,7 +200,7 @@ fun TaskItem(
                         style = MaterialTheme.typography.h5,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
-                        textDecoration = if (state) TextDecoration.LineThrough else TextDecoration.None
+                        textDecoration = if (toDoTask.isDone) TextDecoration.LineThrough else TextDecoration.None
                     )
 
                     Box(
