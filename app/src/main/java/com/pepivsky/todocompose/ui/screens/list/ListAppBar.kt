@@ -186,7 +186,7 @@ fun DropDownMenuActions(onDeleteAllConfirmed: () -> Unit, onUncheckAllConfirmed:
         }) {
             Text(
                 //modifier = Modifier.padding(start = LARGE_PADDING),
-                text = "Uncheck all",
+                text = stringResource(id = R.string.uncheck_all),
                 style = Typography.subtitle2
             )
         }

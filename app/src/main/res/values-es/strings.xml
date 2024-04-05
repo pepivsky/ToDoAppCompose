@@ -29,4 +29,6 @@
     <string name="delete_all_tasks">¿Eliminar todas las tareas?</string>
     <string name="delete_all_tasks_confirmation">¿Estás seguro de que deseas eliminar todas las tareas? No hay vuelta atrás después de esta acción.</string>
     <string name="to_do_logo">Logotipo de To-Do</string>
+    <string name="uncheck_all">Desmarcar todo</string>
+
 </resources>
