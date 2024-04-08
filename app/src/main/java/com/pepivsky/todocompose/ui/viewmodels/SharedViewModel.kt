@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
+import com.pepivsky.todocompose.data.models.ToDoTaskIsDone
 import com.pepivsky.todocompose.data.repositories.DataStoreRepository
 import com.pepivsky.todocompose.data.repositories.ToDoRepository
 import com.pepivsky.todocompose.util.Action
@@ -158,8 +159,11 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
-    private fun updateIsDone() {
-
+    fun updateIsDone(toDoTask: ToDoTask) {
+        val taskIsDone = ToDoTaskIsDone(id = toDoTask.id, isDone = true)
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.updateIsDone(toDoTaskIsDone = taskIsDone)
+        }
     }
 
     private fun deleteTask() {
