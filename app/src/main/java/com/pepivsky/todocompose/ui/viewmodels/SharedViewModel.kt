@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pepivsky.todocompose.data.models.Priority
 import com.pepivsky.todocompose.data.models.ToDoTask
+import com.pepivsky.todocompose.data.models.ToDoTaskIsDone
 import com.pepivsky.todocompose.data.repositories.DataStoreRepository
 import com.pepivsky.todocompose.data.repositories.ToDoRepository
 import com.pepivsky.todocompose.util.Action
@@ -73,6 +74,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         try {
             viewModelScope.launch {
                 toDoRepository.getAllTasks.collect {
+                    Log.d("getAllTasks", "Triggered $it")
                     _allToDoTasks.value = RequestState.Success(it)
                 }
             }
@@ -151,6 +153,19 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
         }
     }
 
+    private fun updateAllTasksToDone() {
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.updateAllTasksToUndone()
+        }
+    }
+
+    fun updateIsDone(toDoTask: ToDoTask) {
+        val taskIsDone = ToDoTaskIsDone(id = toDoTask.id, isDone = true)
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.updateIsDone(toDoTaskIsDone = taskIsDone)
+        }
+    }
+
     private fun deleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
@@ -172,6 +187,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
             Action.DELETE -> deleteTask()
             Action.DELETE_ALL -> deleteAllTasks()
             Action.UNDO -> addTask()
+            Action.UNCHECK_ALL -> updateAllTasksToDone()
             // else se llama cuando es NO_ACTION
             else -> {}
 

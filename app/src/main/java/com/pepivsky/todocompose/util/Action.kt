@@ -6,7 +6,8 @@ enum class Action {
     DELETE,
     DELETE_ALL,
     UNDO,
-    NO_ACTION
+    NO_ACTION,
+    UNCHECK_ALL,
 }
 
 // convert string to Action object

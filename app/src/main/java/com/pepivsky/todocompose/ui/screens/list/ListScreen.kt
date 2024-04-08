@@ -87,9 +87,10 @@ fun ListScreen(
                     // dismiss arregla que se muestren todas las snackbars, la ultima oculta a las demas, es el comportamiento mas deseado
                     scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                 }, onCheckBoxPressed = {  action, toDoTask ->
-                    sharedViewModel.action.value = action
+                    /*sharedViewModel.action.value = action
                     sharedViewModel.updateTaskFields(selectedTask = toDoTask)
-                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()*/
+                    sharedViewModel.updateIsDone(toDoTask)
                 }
             )
         },
