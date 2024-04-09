@@ -160,7 +160,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     }
 
     fun updateIsDone(toDoTask: ToDoTask) {
-        val taskIsDone = ToDoTaskIsDone(id = toDoTask.id, isDone = true)
+        val taskIsDone = ToDoTaskIsDone(id = toDoTask.id, isDone = toDoTask.isDone)
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.updateIsDone(toDoTaskIsDone = taskIsDone)
         }
