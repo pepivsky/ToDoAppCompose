@@ -31,7 +31,7 @@ interface ToDoDAO {
 
     // Actualizar todos los registros de isDone a true
     @Query("UPDATE todo_table SET isDone = 0")
-    suspend fun updateAllTasksToUndone()
+    suspend fun updateAllTasksToUndone(): Int
 
     @Delete
     suspend fun deleteTask(toDoTask: ToDoTask)

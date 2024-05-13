@@ -27,6 +27,9 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
+    private val _showSplash = MutableStateFlow(true)
+    val showSplash = _showSplash.asStateFlow()
+
     // val to observe that action is sended
     val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
@@ -76,6 +79,7 @@ class SharedViewModel @Inject constructor( // inyectando el toDoRepository en el
                 toDoRepository.getAllTasks.collect {
                     Log.d("getAllTasks", "Triggered $it")
                     _allToDoTasks.value = RequestState.Success(it)
+                    _showSplash.value = false
                 }
             }
         } catch (e: Exception) {
