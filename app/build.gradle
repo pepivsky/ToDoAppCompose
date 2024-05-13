@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace 'com.pepivsky.todocompose'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.pepivsky.todocompose"
         minSdk 24
-        targetSdk 33
-        versionCode 13
-        versionName "2.0.2"
+        targetSdk 34
+        versionCode 18
+        versionName "2.0.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
